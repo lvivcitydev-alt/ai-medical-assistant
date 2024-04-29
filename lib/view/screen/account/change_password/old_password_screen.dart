@@ -1,3 +1,4 @@
+import 'package:dr_ai/core/constant/routes.dart';
 import 'package:dr_ai/core/helper/extention.dart';
 import 'package:dr_ai/logic/validation/formvalidation_cubit.dart';
 import 'package:dr_ai/view/widget/custom_text_field.dart';
@@ -10,30 +11,42 @@ import 'package:gap/gap.dart';
 import '../../../widget/custom_button.dart';
 import '../../auth/forget_password.dart';
 
-class OldPasswordScreen extends StatelessWidget {
+class OldPasswordScreen extends StatefulWidget {
   const OldPasswordScreen({super.key});
 
   @override
+  State<OldPasswordScreen> createState() => _OldPasswordScreenState();
+}
+
+class _OldPasswordScreenState extends State<OldPasswordScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String? _password;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.w),
-        child: Column(
-          children: [
-            Gap(32.h),
-            const CustomScrollableAppBar(),
-            Gap(20.h),
-            Expanded(
+      body: Column(
+        children: [
+          Gap(32.h),
+          const CustomScrollableAppBar(
+            title: "Change Password",
+          ),
+          Gap(20.h),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 18.w),
               child: Column(
                 children: [
                   const UpdatePasswordStepper(stepReachedNumber: 0),
                   Form(
+                    key: _formKey,
                     child: CustomTextFormField(
                       keyboardType: TextInputType.visiblePassword,
                       isVisible: true,
                       title: "Old Password",
                       hintText: "Enter Your Old Password",
-                      onSaved: (data) {},
+                      onSaved: (data) {
+                        _password = data;
+                      },
                       validator:
                           context.bloc<FormvalidationCubit>().validatePassword,
                     ),
@@ -52,14 +65,15 @@ class OldPasswordScreen extends StatelessWidget {
                   const Spacer(),
                   CustomButton(
                     title: "Next",
-                    onPressed: () {},
+                    onPressed: () =>
+                        Navigator.pushNamed(context, RouteManager.newPassword),
                   ),
                   Gap(30.h)
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
